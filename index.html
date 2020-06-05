@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="./js/Deck.js"></script>
+    <script src="./js/Player.js"></script>
+    <title>Antin korttipeli</title>
+</head>
+<body>
+    <div class="page-wrapper">       
+        <div class="gameInfo">    
+            <div class="name-container">
+                <label>Anna nimesi</label> 
+                <input id="nameInput" type="text" placeholder="NIMI">
+                
+            </div>  
+            <table class="bet-table">  
+                <tr>
+                    <td>Neljä samaa</td>
+                    <td>20</td> 
+                    <td>20</td> 
+                    <td>20</td> 
+                    <td>20</td> 
+                    <td>20</td>               
+                </tr>   
+                <tr>
+                    <td>Täyskäsi</td>
+                    <td>9</td>
+                    <td>9</td>
+                    <td>9</td>
+                    <td>9</td>
+                    <td>9</td>
+                </tr>
+                <tr>
+                    <td>Väri</td>
+                    <td>6</td>
+                    <td>6</td>
+                    <td>6</td>
+                    <td>6</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>Suora</td>
+                    <td>4</td>
+                    <td>4</td>
+                    <td>4</td>
+                    <td>4</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>Kolme samaa</td>
+                    <td>4</td>
+                    <td>4</td>
+                    <td>4</td>
+                    <td>4</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>Kaksi paria</td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>Pari</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>Pannos</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+            
+            </table>
+           
+        </div>
+        
+     
+       <!--  <div class="updates">
+            <div>Rahat:
+                <span id="money">100</span>
+            </div>
+            <div id="betContainer">Pannos:               
+                <span id="minus">-</span>
+                <span id="bet">1</span>
+                <span id="plus">+</span>
+            </div>
+            <div>Voitto:
+                <span id="win"></span>
+            </div>
+        </div> -->
+
+        <!--
+        <p>Erottele pilkulla ne kortit, jotka haluat vaihtaa</p>
+        <input id="cardInput" type="text" placeholder="esim. 1,2,4">
+        -->
+        
+        <h2 id="results">napsauta pitääksesi</h2>
+        <div id="cards">
+            <div class="lock" id="lock0"></div>
+            <div class="lock" id="lock1"></div>
+            <div class="lock" id="lock2"></div>
+            <div class="lock" id="lock3"></div>
+            <div class="lock" id="lock4"></div>
+            <div onclick="SelectCard(0)" id="card0" class="card notLocked">
+                <img src="images/backside.png" alt="">
+            </div>
+            <div onclick="SelectCard(1)" id="card1" class="card notLocked">
+                <img src="images/backside.png" alt="">
+            </div>
+            <div onclick="SelectCard(2)" id="card2" class="card notLocked">
+                <img src="images/backside.png" alt="">
+            </div>
+            <div onclick="SelectCard(3)" id="card3" class="card notLocked">
+                <img src="images/backside.png" alt="">
+            </div>
+            <div onclick="SelectCard(4)" id="card4" class="card notLocked">
+                <img src="images/backside.png" alt="">
+            </div>
+
+        </div>
+        
+       
+        <div class="updates">
+            <div class="updatesMoney">Rahat
+                <span id="money">100</span><span>€</span>
+            </div>
+            <div class="updatesWin">Voitto
+                <span id="win">0</span>
+            </div>
+        </div>
+        <div class="buttons">
+            <div id="betContainer" class="updatesBet">
+                <small>Pannos</small>  
+                <div class="bet">        
+                    <span id="minus"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                    <span id="bet">1</span><span>€</span>
+                    <span id="plus"><i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+                </div> 
+            </div>
+            
+            <button class="gameButton" onclick="StartGame()">Aloita</button>
+            <button class="gameButton" onclick="ChangeCards()">Vaihda</button>
+        </div>
+        <script>
+            document.getElementById("minus").addEventListener("click", function() {
+                if (document.getElementById("bet").innerHTML > 1) {
+                    document.getElementById("bet").innerHTML -= 1;
+                }
+            });
+            document.getElementById("plus").addEventListener("click", function() {
+                if (document.getElementById("bet").innerHTML < 10) {
+                    document.getElementById("bet").innerHTML = 
+                    Number(document.getElementById("bet").innerHTML) + 1;
+                }
+            });
+
+
+
+        </script>
+        
+    </div>
+    <script>
+        function StartGame(){
+            if (typeof deck == "undefined" && typeof player == "undefined") {
+                deck = new Deck();
+                player = new Player(document.getElementById("nameInput").value, 5, deck, 100, 1);
+            }
+            deck.takenCards = [];
+           
+            document.getElementById("win").innerHTML = "0";
+            player.bet = document.getElementById("bet").innerHTML;
+            player.money -= player.bet;
+            document.getElementById("money").innerHTML = player.money;
+
+            console.log("Peli aloitettu");
+            deck.Deal(5, player);
+
+            let lockedCards = document.getElementsByClassName("locked");
+            
+            lockedCards = Array.from(lockedCards);
+            console.log(lockedCards);
+            for (let i = 0; i < lockedCards.length; i++) {
+                lockedCards[i].classList.remove("locked");
+                lockedCards[i].classList.add("notLocked");
+                
+            }
+
+            let cardsStatuses = document.getElementsByClassName("lock");
+            cardsStatuses = Array.from(cardsStatuses);
+            for (let i = 0; i < cardsStatuses.length; i++) {
+                //document.getElementById("lock" + i).innerHTML = "";
+                cardsStatuses[i].innerHTML = "";
+            }
+        }
+
+        function ChangeCards(){
+            // otetaan käyttäjän valitsemat kortit ja lähetetään ne 
+            // player.ChangeCards funktiolle. esim. 1,3,4
+            
+            let idString = "";
+            let cardsToChange = document.getElementsByClassName("notLocked");
+            console.log(cardsToChange.length);
+            for(let i=0; i<cardsToChange.length; i++){
+
+                let cardID = cardsToChange[i].id.substr(4).toString();
+                idString += cardID+",";
+
+            }
+            // lukujonon viimeinen pilkku pois.
+            idString = idString.substring(0, idString.length - 1);
+            
+            player.ChangeCards(idString);
+
+
+        }
+
+        function SelectCard(id){
+
+            /*
+            Jos kortin class lista ei sisällä arvoa "locked", 
+            anna kortille class locked.
+
+            Jos class locked on jo olemassa, 
+            ota locked pois ja lisää notLocked
+            */
+
+            if(document.getElementById("card"+id).classList.contains("notLocked")){
+                document.getElementById("lock"+id).innerHTML = "Lukittu";
+                document.getElementById("card"+id).classList.add("locked");
+                document.getElementById("card"+id).classList.remove("notLocked");
+
+            }else{
+                document.getElementById("lock"+id).innerHTML = "";
+                document.getElementById("card"+id).classList.add("notLocked");
+                document.getElementById("card"+id).classList.remove("locked");
+
+
+
+            }
+
+        }
+
+    </script>
+</body>
+</html>
